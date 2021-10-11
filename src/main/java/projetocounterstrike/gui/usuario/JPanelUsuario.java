@@ -17,13 +17,11 @@ public class JPanelUsuario extends JPanel{
             private CardLayout layoutCard;
     
             private JPanelListagem telaListagem;
-            private JPanelFormulario telaFormulario;
+            private JPanelEdicao telaEdicao;
             
             public JPanelUsuario(Controle controle){
-        
-                        this.controle = controle;
-        
-                        initComponents();
+                this.controle = controle;
+                initComponents();
             }
             
                 private void initComponents(){
@@ -32,15 +30,16 @@ public class JPanelUsuario extends JPanel{
                         this.setLayout(layoutCard);//defini o gerenciador de layout para este painel.
 
                         telaListagem = new JPanelListagem(this, getControle());
-                        telaFormulario = new JPanelFormulario(this, getControle());
+                        
+                        telaEdicao = new JPanelEdicao(this, getControle());
 
                         this.add(getTelaListagem(), "tela_listagem"); // adiciona uma carta
-                        this.add(getTelaFormulario(), "tela_edicao");     // adiciona a segunda carta no baralho.        
+                        this.add(getTelaFormulario(), "tela_edicao"); // adiciona a segunda carta no baralho.        
 
                         layoutCard.show(this, "tela_listagem"); //por padrão mostra o painel de listagem
            }
                 
-            public void showTela(String nomeTela){
+            /*public void showTela(String nomeTela){
 
                         if(nomeTela.equals("tela_edicao")){
 
@@ -52,18 +51,18 @@ public class JPanelUsuario extends JPanel{
                         }
 
                         layoutCard.show(this, nomeTela); 
-            }    
+            }*/    
                 
-            public JPanelFormulario getTelaFormulario() {
-                        return telaFormulario;
+            public JPanelEdicao getTelaFormulario() {
+                return telaEdicao;
             }
             
             public JPanelListagem getTelaListagem() {
-                        return telaListagem;
+                return telaListagem;
             }  
             
             public Controle getControle() {
-                  return controle;
+                return controle;
             }    
     
 }

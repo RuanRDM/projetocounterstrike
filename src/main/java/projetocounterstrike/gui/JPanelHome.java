@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projetocounterstrike.gui;
 import projetocounterstrike.Controle;
 import java.awt.BorderLayout;
@@ -27,7 +22,6 @@ public class JPanelHome extends JPanel{
             private Controle controle;
 
             public JPanelHome(Controle controle){
-
                 this.controle = controle;
                 initComponents();
             }
@@ -37,18 +31,18 @@ public class JPanelHome extends JPanel{
                 layoutGeo = new BorderLayout();
                 this.setLayout(layoutGeo);//seta o gerenciador de layout para este painel.
 
-                lblMensagem = new JLabel("Tela de Boas Vindas ao Sisteminha!");
+                lblMensagem = new JLabel("Home - Counter Strike");
                 lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
                 this.add(lblMensagem, BorderLayout.NORTH);
 
-                lblImagem = new JLabel(new ImageIcon(JPanelHome.class.getResource("/images/logo_ifsul_color.png")));
+                lblImagem = new JLabel(new ImageIcon(JPanelHome.class.getResource("/images/logo_counterstrike.png")));
                 this.add(lblImagem, BorderLayout.CENTER);//adiciona a imagem na parte central deste painel.
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");       
 
                 lblData = new JLabel(df.format(c.getTime()));
-                lblData.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+                lblData.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 lblData.setHorizontalAlignment(SwingConstants.CENTER);
                 this.add(lblData, BorderLayout.SOUTH); //adiciona o rotulo para a data na parte inferior deste painel.       
 

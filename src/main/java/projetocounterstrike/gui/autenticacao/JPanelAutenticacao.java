@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projetocounterstrike.gui.autenticacao;
 import projetocounterstrike.Controle;
 import java.awt.GridBagConstraints;
@@ -25,9 +20,9 @@ public class JPanelAutenticacao  extends JPanel implements ActionListener{
     private GridBagLayout gridLayout;
     private GridBagConstraints posicionador;
     
-    private JLabel  lblCPF;
+    private JLabel lblnick;
     private JLabel lblSenha;
-    private JTextField txfCPF;
+    private JTextField txfnick;
     private JPasswordField psfSenha;
     private JButton btnLogar;
 
@@ -43,19 +38,19 @@ public class JPanelAutenticacao  extends JPanel implements ActionListener{
         gridLayout = new GridBagLayout();//inicializando o gerenciador de layout
         this.setLayout(gridLayout);//definie o gerenciador para este painel.
         
-        lblCPF = new JLabel("CPF:");
+        lblnick = new JLabel("Nickname: ");
         posicionador = new GridBagConstraints();
         posicionador.gridy = 0;//policao da linha (vertical)
         posicionador.gridx = 0;// posição da coluna (horizontal)
-        this.add(lblCPF, posicionador);//o add adiciona o rotulo no painel
+        this.add(lblnick, posicionador);//o add adiciona o rotulo no painel
         
-        txfCPF = new JTextField(10);
+        txfnick = new JTextField(10);
         posicionador = new GridBagConstraints();
         posicionador.gridy = 0;//policao da linha (vertical)
         posicionador.gridx = 1;// posição da coluna (horizontal)
-        this.add(txfCPF, posicionador);//o add adiciona o rotulo no painel        
+        this.add(txfnick, posicionador);//o add adiciona o rotulo no painel        
         
-        lblSenha = new JLabel("Senha:");
+        lblSenha = new JLabel("Senha: ");
         posicionador = new GridBagConstraints();
         posicionador.gridy = 1;//policao da linha (vertical)
         posicionador.gridx = 0;// posição da coluna (horizontal)
@@ -77,24 +72,20 @@ public class JPanelAutenticacao  extends JPanel implements ActionListener{
 
     }
 
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
         if(e.getActionCommand().equals(btnLogar.getActionCommand())){
             
             //validacao do formulario.
-            if(txfCPF.getText().trim().length() == 11 && new String(psfSenha.getPassword()).trim().length() > 3 ){
-                                       
-                controle.autenticar(txfCPF.getText().trim(), new String(psfSenha.getPassword()).trim());
-                
+            if(txfnick.getText().trim().length() > 3 && new String(psfSenha.getPassword()).trim().length() > 3 ){                       
+                controle.autenticar(txfnick.getText().trim(), new String(psfSenha.getPassword()).trim());  
             }else{
-                
-                JOptionPane.showMessageDialog(this, "Informe os dados para CPF e Senha!", "Autenticação", JOptionPane.ERROR_MESSAGE);
-
-            }
-            
+                JOptionPane.showMessageDialog(this, "Informe os dados para Nickname e Senha! (Somente são aceitos nicknames e senhas com mais de 3 caracteres)", "Autenticação", JOptionPane.ERROR_MESSAGE);
+            }   
         }                
         
-    }    
+    } 
     
 }

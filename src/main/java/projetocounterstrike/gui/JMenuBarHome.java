@@ -38,7 +38,7 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
             menuArquivo.add(menuItemSair);
         
             menuCadastro = new JMenu("Cadastros");
-            menuItemUsuario = new JMenuItem("Usuário");
+            menuItemUsuario = new JMenuItem("Jogadores");
             menuItemUsuario.addActionListener(this);
             menuItemUsuario.setActionCommand("menu_usuario");
             menuCadastro.add(menuItemUsuario);   
@@ -52,19 +52,15 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
                 
         if(e.getActionCommand().equals(menuItemSair.getActionCommand())){
-        
             //se o usuario clicou no menuitem Sair
             int d = JOptionPane.showConfirmDialog(this, "Deseja realmente sair do sistema? ", "Sair", JOptionPane.YES_NO_OPTION);
             if(d == 0){                
                 controle.fecharBD();//fecha a conexao com o banco de dados.
                 System.exit(0);//finaliza o processo do programa.
             }
-            
-            
-        }else if(e.getActionCommand().equals(menuItemUsuario.getActionCommand())){
-            
-                        //se o usuario clicou no menuitem Usuario            
-                        controle.showTela("tela_usuario");            
+        }else if(e.getActionCommand().equals(menuItemUsuario.getActionCommand())){      
+            //se o usuario clicou no menuitem Usuario            
+            controle.showTela("tela_usuario");            
         }
         
     }   

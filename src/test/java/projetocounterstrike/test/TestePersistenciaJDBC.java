@@ -17,7 +17,7 @@ import projetocounterstrike.model.dao.PersistenciaJDBC;
 public class TestePersistenciaJDBC {
     
     
-    //@Test
+    @Test
     public void testarConexaoJDBC() throws Exception{
         PersistenciaJDBC conexaoJDBC = new PersistenciaJDBC();
         

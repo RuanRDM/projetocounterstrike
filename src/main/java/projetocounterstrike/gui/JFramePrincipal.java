@@ -16,40 +16,36 @@ import javax.swing.JPanel;
  * @author ruan_
  */
 public class JFramePrincipal  extends JFrame implements WindowListener {
-public Controle controle;
+    
+            public Controle controle;
             public CardLayout cardLayout;
             public JPanel painel;
             
             public JFramePrincipal(Controle controle){
-                        this.controle = controle;        
-                        initComponents();
+                this.controle = controle;        
+                initComponents();
             }
     
-            private void initComponents(){
-            
-                        this.setTitle("Counter Strike - Login do jogador");//seta o título
-                        
-                        this.setMinimumSize(new Dimension(600,600)); //tamanho minimo quando for reduzido.
-
-                        this.setExtendedState(JFrame.MAXIMIZED_BOTH); // por padrão abre maximizado.        
-                        this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );// finaliza o processo quando o frame é fechado.            
-                        this.addWindowListener(this);//adiciona o listener no frame
+            private void initComponents(){           
+                this.setTitle("Counter Strike - Login do jogador");//seta o título                       
+                this.setMinimumSize(new Dimension(600,600)); //tamanho minimo quando for reduzido.
+                this.setExtendedState(JFrame.MAXIMIZED_BOTH); // por padrão abre maximizado.        
+                this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );// finaliza o processo quando o frame é fechado.            
+                this.addWindowListener(this);//adiciona o listener no frame
         
-                        cardLayout = new CardLayout();//iniciando o gerenciador de layout para esta JFrame
-                        painel = new JPanel();//inicializacao
-                        
-                        painel.setLayout(cardLayout);//definindo o cardLayout para o paineldeFundo
+                cardLayout = new CardLayout();//iniciando o gerenciador de layout para esta JFrame
+                painel = new JPanel();//inicializacao                        
+                painel.setLayout(cardLayout);//definindo o cardLayout para o paineldeFundo
 
-                        this.add(painel);  //adiciona no JFrame o paineldeFundo
-                
+                this.add(painel);  //adiciona no JFrame o paineldeFundo               
              }
             
             public void addTela(JPanel p, String nome){   
-                        painel.add(p, nome);
+                painel.add(p, nome);
             }
 
             public void showTela(String nome){
-                        cardLayout.show(painel, nome);
+                cardLayout.show(painel, nome);
             }
     
             @Override
