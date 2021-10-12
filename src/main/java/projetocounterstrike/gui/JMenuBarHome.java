@@ -20,7 +20,7 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
     private JMenuItem menuItemSair;
 
     private JMenu menuCadastro;
-    private JMenuItem menuItemUsuario;    
+    private JMenuItem menuItemCompra;    
 
     private Controle controle;
     
@@ -38,10 +38,10 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
             menuArquivo.add(menuItemSair);
         
             menuCadastro = new JMenu("Cadastros");
-            menuItemUsuario = new JMenuItem("Jogadores");
-            menuItemUsuario.addActionListener(this);
-            menuItemUsuario.setActionCommand("menu_usuario");
-            menuCadastro.add(menuItemUsuario);   
+            menuItemCompra = new JMenuItem("Compras");
+            menuItemCompra.addActionListener(this);
+            menuItemCompra.setActionCommand("menu_compra");
+            menuCadastro.add(menuItemCompra);   
         
             this.add(menuArquivo);
             this.add(menuCadastro);
@@ -58,9 +58,9 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
                 controle.fecharBD();//fecha a conexao com o banco de dados.
                 System.exit(0);//finaliza o processo do programa.
             }
-        }else if(e.getActionCommand().equals(menuItemUsuario.getActionCommand())){      
+        }else if(e.getActionCommand().equals(menuItemCompra.getActionCommand())){      
             //se o usuario clicou no menuitem Usuario            
-            controle.showTela("tela_usuario");            
+            controle.showTela("tela_compra");            
         }
         
     }   

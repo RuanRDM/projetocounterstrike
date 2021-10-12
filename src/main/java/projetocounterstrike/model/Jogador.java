@@ -123,4 +123,9 @@ public class Jogador implements Serializable {
         this.patentes = patentes;
     }
     
+    @Override
+    public String toString(){
+        return nickname;
+    }
+    
 }

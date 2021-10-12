@@ -13,11 +13,11 @@ import projetocounterstrike.Controle;
  */
 public class JPanelEdicao extends javax.swing.JPanel {
 
-    private JPanelUsuario pnlUsuario;
+    private JPanelCompra pnlCompra;
     private Controle controle;
     
-    public JPanelEdicao(JPanelUsuario pnlUsuario, Controle controle) {
-        this.pnlUsuario = pnlUsuario;
+    public JPanelEdicao(JPanelCompra pnlCompra, Controle controle) {
+        this.pnlCompra = pnlCompra;
         this.controle = controle;
         initComponents();
     }

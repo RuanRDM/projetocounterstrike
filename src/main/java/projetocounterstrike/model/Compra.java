@@ -100,5 +100,4 @@ public class Compra implements Serializable{
         this.jogador = jogador;
     }
 
-    
 }

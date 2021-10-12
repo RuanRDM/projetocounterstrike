@@ -5,7 +5,14 @@
  */
 package projetocounterstrike.gui.usuario;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import projetocounterstrike.Controle;
+import projetocounterstrike.model.Compra;
+import projetocounterstrike.model.ItensCompra;
 
 /**
  *
@@ -13,15 +20,43 @@ import projetocounterstrike.Controle;
  */
 public class JPanelListagem extends javax.swing.JPanel {
 
-    private JPanelUsuario pnlUsuario;
+    private JPanelCompra pnlCompra;
     private Controle controle;
     
-    public JPanelListagem(JPanelUsuario pnlUsuario, Controle controle) {
-        this.pnlUsuario = pnlUsuario;
+    public JPanelListagem(JPanelCompra pnlCompra, Controle controle) {
+        this.pnlCompra = pnlCompra;
         this.controle = controle;
         initComponents();
     }
 
+    public void populaTable(){
+        DefaultTableModel model =  (DefaultTableModel) tblListagem.getModel();//recuperacao do modelo da tabela
+
+        model.setRowCount(0);//elimina as linhas existentes (reset na tabela)
+
+        try {
+            List<Compra> listComp = controle.getConexaoJDBC().getCompras();
+            for(Compra cp : listComp){
+                System.out.println("cp.getItens() : "+ cp.getItens() );
+                // vai imprimir apenas o cpf do usuario em função do método toString da classe usuario 
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                int quant=0;
+                if(cp.getItens()!= null){//como a cidade é opcional, testa antes recuperar a cidade do Usuario
+                    Object[] obj = {cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""};
+                    for(ItensCompra ic : cp.getItens()){
+                        quant=quant+ic.getQuantidade();
+                    }
+                    obj[3]=quant;
+                    model.addRow((Object[]) obj);
+                }else
+                    model.addRow(new Object[]{cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""});
+            }
+
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(this, "Erro ao listar Compras -:"+ex.getLocalizedMessage(), "Usuários", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,7 +110,7 @@ public class JPanelListagem extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nickname", "Data Cadastro", "Data Último Login", "Pontos"
+                "Jogador ID (Nickname)", "Data Da Compra", "Valor Total", "Quantidade de Itens"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -107,4 +142,5 @@ public class JPanelListagem extends javax.swing.JPanel {
     private javax.swing.JTable tblListagem;
     private javax.swing.JTextField txfFiltroNome;
     // End of variables declaration//GEN-END:variables
+
 }

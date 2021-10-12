@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import projetocounterstrike.model.Artefato;
 import projetocounterstrike.model.Compra;
@@ -275,7 +276,7 @@ public class PersistenciaJDBC implements InterfacePersistencia{
         while(rs.next()){
 
             Compra compra = new Compra();//inicialização do objeto que será retornado.
-            compra.setId(rs.getInt("id"));
+            compra.setId(rs.getInt("id")); 
             compra.setData2(rs.getDate("data"));
             compra.setValorTotal(rs.getFloat("valortotal"));
             Jogador j = new Jogador();
@@ -283,24 +284,24 @@ public class PersistenciaJDBC implements InterfacePersistencia{
             compra.setJogador(j);         
 
             // executar um select envolvendo tb_itenscompra.
-            PreparedStatement ps2 = this.con.prepareStatement("select ic.id, ic.quantidade, ic.valor, ic.artefato_id, ic.compra_id " + " from tb_itenscompra ic, tb_compra c " + " where ic.compra_id=c.id and c.id = ? ");  
+            PreparedStatement ps2 = this.con.prepareStatement("select ic.quantidade " + " from tb_itenscompra ic, tb_compra c " + " where ic.compra_id=c.id and c.id = ? ");  
             ps2.setInt(1, compra.getId());
 
             ResultSet rs2 = ps2.executeQuery();
             while(rs2.next()){
 
                 ItensCompra ic = new ItensCompra();
-                ic.setId(rs2.getInt("id"));
+                //ic.setId(rs2.getInt("id"));
                 ic.setQuantidade(rs2.getInt("quantidade"));
-                ic.setValor(rs2.getFloat("valor"));
+                //ic.setValor(rs2.getFloat("valor"));
                     
-                Artefato a = new Artefato();
-                a.setId(rs2.getInt("artefato_id"));
-                ic.setArtefato(a);
+                //Artefato a = new Artefato();
+                //a.setId(rs2.getInt("artefato_id"));
+                //ic.setArtefato(a);
                     
-                Compra co = new Compra();
-                co.setId(rs2.getInt("compra_id"));
-                ic.setCompra(co);
+                //Compra co = new Compra();
+                //co.setId(rs2.getInt("compra_id"));
+                //ic.setCompra(co);
                     
                 compra.setItem(ic);//adiciona na compra o item 
             }
