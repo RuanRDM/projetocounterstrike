@@ -5,7 +5,18 @@
  */
 package projetocounterstrike.gui.usuario;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import projetocounterstrike.Controle;
+import projetocounterstrike.model.Compra;
+import projetocounterstrike.model.Jogador;
 
 /**
  *
@@ -15,11 +26,76 @@ public class JPanelEdicao extends javax.swing.JPanel {
 
     private JPanelCompra pnlCompra;
     private Controle controle;
+    private Integer id = null;
     
     public JPanelEdicao(JPanelCompra pnlCompra, Controle controle) {
         this.pnlCompra = pnlCompra;
         this.controle = controle;
         initComponents();
+    }
+    
+    public Compra getFormulario() throws ParseException{
+        //validacao do formulario
+        String svalidadata = txfData.getText().trim();
+        String[] arrayData = svalidadata.split("");
+        String caracteres="0987654321.";
+        System.out.println("txfData.getText().trim().length(): "+txfData.getText().trim().length()+"\narrayData[2]: "+arrayData[2]+"\ncbxJogador.getSelectedIndex(): "+cbxJogador.getSelectedIndex()+"\ncbxJogador.getSelectedItem()"+cbxJogador.getSelectedItem());
+        if(txfData.getText().trim().length()==10 && arrayData[2].equals("/") && arrayData[5].equals("/") && !caracteres.contains(txfValor.getText()+"") && cbxJogador.getSelectedItem().getClass() == Jogador.class){
+            Compra c = new Compra();
+            
+            if(id!=null){
+                c.setId(Integer.parseInt(txfId.getText()));
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String data = txfData.getText().trim();  
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(data));
+            
+            c.setData(cal);
+            
+            c.setValorTotal(Float.parseFloat(txfValor.getText()));
+
+            c.setJogador((Jogador) cbxJogador.getSelectedItem());
+
+            return c;
+        }
+        return null;
+    }
+    
+    public void populaComboJogador(){
+        
+        cbxJogador.removeAllItems();//zera o combo
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cbxJogador.getModel();
+
+        model.addElement("Selecione"); //primeiro item        
+        try {
+            List<Jogador> listJ = controle.getConexaoJDBC().getJogador();
+            
+            for(Jogador j : listJ){
+                model.addElement(j);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao listar Jogadores -:"+ex.getLocalizedMessage(), "Jogadores", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }                
+    }
+    
+    public void populaFormulario(Compra c){
+        if(c == null){//se o parametro estiver nullo, limpa o formulario
+            id=null;
+            txfId.setText("");
+            txfData.setText("");
+            cbxJogador.setSelectedIndex(0);
+            txfValor.setText(""); 
+        }else{
+            id = c.getId();
+            txfId.setText(id.toString());
+            SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+            txfData.setText(s.format(c.getData().getTime()));
+            cbxJogador.getModel().setSelectedItem(c.getJogador());// o combobox retorna um objeto (aqui chama o equals da classe Jogador)
+            txfValor.setText(String.valueOf(c.getValorTotal()));
+        }
     }
 
     /**
@@ -30,31 +106,180 @@ public class JPanelEdicao extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         pnlSul = new javax.swing.JPanel();
         btnSalvar = new javax.swing.JButton();
         btncCancelar = new javax.swing.JButton();
         pnlCentro = new javax.swing.JPanel();
+        lblJogador = new javax.swing.JLabel();
+        lblData = new javax.swing.JLabel();
+        cbxJogador = new javax.swing.JComboBox<>();
+        lblValor = new javax.swing.JLabel();
+        txfValor = new javax.swing.JTextField();
+        txfData = new javax.swing.JTextField();
+        lblId = new javax.swing.JLabel();
+        txfId = new javax.swing.JTextField();
 
         setLayout(new java.awt.BorderLayout());
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
         pnlSul.add(btnSalvar);
 
         btncCancelar.setText("Cancelar");
+        btncCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncCancelarActionPerformed(evt);
+            }
+        });
         pnlSul.add(btncCancelar);
 
         add(pnlSul, java.awt.BorderLayout.PAGE_END);
 
         pnlCentro.setLayout(new java.awt.GridBagLayout());
+
+        lblJogador.setText("Jogador (Nickname):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        pnlCentro.add(lblJogador, gridBagConstraints);
+
+        lblData.setText("Data:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        pnlCentro.add(lblData, gridBagConstraints);
+
+        cbxJogador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+        cbxJogador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxJogadorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 30);
+        pnlCentro.add(cbxJogador, gridBagConstraints);
+
+        lblValor.setText("Valor Total:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        pnlCentro.add(lblValor, gridBagConstraints);
+
+        txfValor.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txfValor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txfValorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
+        pnlCentro.add(txfValor, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
+        pnlCentro.add(txfData, gridBagConstraints);
+
+        lblId.setText("ID:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        pnlCentro.add(lblId, gridBagConstraints);
+
+        txfId.setEditable(false);
+        txfId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txfIdActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        pnlCentro.add(txfId, gridBagConstraints);
+
         add(pnlCentro, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txfValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfValorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txfValorActionPerformed
+
+    private void cbxJogadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxJogadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxJogadorActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        try {
+            Compra cp = getFormulario();//recupera os dados do formulÃ¡rio
+            if(cp != null){
+                try {
+                    //cp.setData(Calendar.getInstance());
+                    pnlCompra.getControle().getConexaoJDBC().persist(cp);
+                    JOptionPane.showMessageDialog(this, "Operação concluida!", "Salvar", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    pnlCompra.showTela("tela_listagem");//muda a tela para a listagem
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar Compra! : "+ex.getMessage(), "Salvar", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Preencha o formulário corretamente! (Obs: Fomato da data: dd/MM/yyyy, valor total somente pode conter números e o jogador deve ser selecionado", "Edição", JOptionPane.INFORMATION_MESSAGE);
+            }
+            pnlCompra.showTela("tela_listagem");
+        }  catch (ParseException ex) {
+            Logger.getLogger(JPanelEdicao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btncCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncCancelarActionPerformed
+        pnlCompra.showTela("tela_listagem");
+    }//GEN-LAST:event_btncCancelarActionPerformed
+
+    private void txfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txfIdActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btncCancelar;
+    private javax.swing.JComboBox<String> cbxJogador;
+    private javax.swing.JLabel lblData;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblJogador;
+    private javax.swing.JLabel lblValor;
     private javax.swing.JPanel pnlCentro;
     private javax.swing.JPanel pnlSul;
+    private javax.swing.JTextField txfData;
+    private javax.swing.JTextField txfId;
+    private javax.swing.JTextField txfValor;
     // End of variables declaration//GEN-END:variables
 }

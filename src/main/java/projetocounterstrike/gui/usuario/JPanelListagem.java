@@ -8,6 +8,7 @@ package projetocounterstrike.gui.usuario;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import projetocounterstrike.Controle;
@@ -37,19 +38,19 @@ public class JPanelListagem extends javax.swing.JPanel {
         try {
             List<Compra> listComp = controle.getConexaoJDBC().getCompras();
             for(Compra cp : listComp){
-                System.out.println("cp.getItens() : "+ cp.getItens() );
+                //System.out.println("cp.getItens() : "+ cp.getItens() );
                 // vai imprimir apenas o cpf do usuario em função do método toString da classe usuario 
                 SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 int quant=0;
                 if(cp.getItens()!= null){//como a cidade é opcional, testa antes recuperar a cidade do Usuario
-                    Object[] obj = {cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""};
+                    Object[] obj = {cp, cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""};
                     for(ItensCompra ic : cp.getItens()){
                         quant=quant+ic.getQuantidade();
                     }
-                    obj[3]=quant;
+                    obj[4]=quant;
                     model.addRow((Object[]) obj);
                 }else
-                    model.addRow(new Object[]{cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""});
+                    model.addRow(new Object[]{cp, cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""});
             }
 
         } catch (Exception ex){
@@ -66,10 +67,6 @@ public class JPanelListagem extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlNorte = new javax.swing.JPanel();
-        lblFiltroNome = new javax.swing.JLabel();
-        txfFiltroNome = new javax.swing.JTextField();
-        btnFiltrar = new javax.swing.JButton();
         pnlSul = new javax.swing.JPanel();
         btnNovo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -80,25 +77,29 @@ public class JPanelListagem extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        lblFiltroNome.setText("Filtrar por nickname:");
-        pnlNorte.add(lblFiltroNome);
-
-        txfFiltroNome.setColumns(20);
-        pnlNorte.add(txfFiltroNome);
-
-        btnFiltrar.setText("Filtrar");
-        pnlNorte.add(btnFiltrar);
-
-        add(pnlNorte, java.awt.BorderLayout.PAGE_START);
-
         btnNovo.setText("Novo");
         btnNovo.setActionCommand("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
         pnlSul.add(btnNovo);
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         pnlSul.add(btnEditar);
 
         btnRemover.setText("Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
         pnlSul.add(btnRemover);
 
         add(pnlSul, java.awt.BorderLayout.PAGE_END);
@@ -110,11 +111,11 @@ public class JPanelListagem extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Jogador ID (Nickname)", "Data Da Compra", "Valor Total", "Quantidade de Itens"
+                "Id", "Jogador Id (Nickname)", "Data Da Compra", "Valor Total", "Quantidade de Itens"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -128,19 +129,64 @@ public class JPanelListagem extends javax.swing.JPanel {
         add(pnlCentro, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+      
+        pnlCompra.showTela("tela_edicao");
+        pnlCompra.getTelaEdicao().populaFormulario(null);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int indice = tblListagem.getSelectedRow();//recupera a linha selecionada
+        if(indice > -1){
+                      
+            DefaultTableModel model =  (DefaultTableModel) tblListagem.getModel(); //recuperacao do modelo da table
+                        
+            Vector linha = (Vector) model.getDataVector().get(indice);//recupera o vetor de dados da linha selecionada
+            
+            Compra c = (Compra) linha.get(0); //model.addRow...
+           
+            pnlCompra.showTela("tela_edicao");
+            pnlCompra.getTelaEdicao().populaFormulario(c);   
+        }else{
+              JOptionPane.showMessageDialog(this, "Selecione uma linha para editar!", "Edição", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        int indice = tblListagem.getSelectedRow();//recupera a linha selecionada
+            if(indice > -1){
+
+                DefaultTableModel model =  (DefaultTableModel) tblListagem.getModel(); //recuperacao do modelo da table
+
+                Vector linha = (Vector) model.getDataVector().get(indice);//recupera o vetor de dados da linha selecionada
+
+                Compra u = (Compra) linha.get(0); //model.addRow...
+
+                try {
+                    pnlCompra.getControle().getConexaoJDBC().remover(u);
+                    JOptionPane.showMessageDialog(this, "Compra removida!", "Compras", JOptionPane.INFORMATION_MESSAGE);
+                    populaTable(); //refresh na tabela
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao remover Compra -:"+ex.getLocalizedMessage(), "Compras", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }                        
+
+            }else{
+                  JOptionPane.showMessageDialog(this, "Selecione uma linha para remover!", "Remoção", JOptionPane.INFORMATION_MESSAGE);
+            }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnRemover;
-    private javax.swing.JLabel lblFiltroNome;
     private javax.swing.JPanel pnlCentro;
-    private javax.swing.JPanel pnlNorte;
     private javax.swing.JPanel pnlSul;
     private javax.swing.JScrollPane scpRolagem;
     private javax.swing.JTable tblListagem;
-    private javax.swing.JTextField txfFiltroNome;
     // End of variables declaration//GEN-END:variables
 
 }

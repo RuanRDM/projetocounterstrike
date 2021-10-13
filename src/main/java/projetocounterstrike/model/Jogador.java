@@ -58,6 +58,10 @@ public class Jogador implements Serializable {
     public Jogador(){
         
     }
+    
+    public Jogador(String nickname){
+        this.nickname = nickname;
+    }
 
     public String getNickname() {
         return nickname;
@@ -126,6 +130,25 @@ public class Jogador implements Serializable {
     @Override
     public String toString(){
         return nickname;
+    }
+    
+   @Override
+    public boolean equals(Object o){
+
+        if(o == null){
+            return false;
+
+        }else if(!(o instanceof Jogador)){
+            return false;
+
+        }else{
+            Jogador j = (Jogador) o;
+            if (j.getNickname() == this.getNickname()){
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
     
 }

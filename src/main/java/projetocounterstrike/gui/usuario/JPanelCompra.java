@@ -38,19 +38,15 @@ public class JPanelCompra extends JPanel{
                 layoutCard.show(this, "tela_listagem"); //por padrão mostra o painel de listagem
            }
                 
-            /*public void showTela(String nomeTela){
+           public void showTela(String nomeTela){
 
-                        if(nomeTela.equals("tela_edicao")){
-
-                            getTelaFormulario().populaComboCidade();
-
-                        }else if(nomeTela.equals("tela_listagem")){
-
-                            telaListagem.populaTable();
-                        }
-
-                        layoutCard.show(this, nomeTela); 
-            }*/    
+                if(nomeTela.equals("tela_edicao")){
+                    getTelaEdicao().populaComboJogador();
+                }else if(nomeTela.equals("tela_listagem")){
+                    telaListagem.populaTable();
+                }
+                layoutCard.show(this, nomeTela); 
+            }  
                 
             public JPanelEdicao getTelaEdicao() {
                 return telaEdicao;

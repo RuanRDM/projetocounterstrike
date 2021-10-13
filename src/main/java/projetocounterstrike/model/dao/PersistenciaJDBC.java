@@ -176,9 +176,11 @@ public class PersistenciaJDBC implements InterfacePersistencia{
                 
                 //estratégia para alteração: remove tudo e depois insere novamente.
                 
-                PreparedStatement ps = this.con.prepareStatement("update tb_compra set valortotal = ? where id = ?"); 
+                PreparedStatement ps = this.con.prepareStatement("update tb_compra set valortotal = ?, data = ?, jogador_id=? where id = ?"); 
                 ps.setFloat(1, compra.getValorTotal());
-                ps.setInt(2, compra.getId());
+                ps.setDate(2, new java.sql.Date(compra.getData().getTimeInMillis()));
+                ps.setString(3, compra.getJogador().getNickname());
+                ps.setInt(4, compra.getId());
                 ps.execute();
                 
                 ps = this.con.prepareStatement("delete from tb_itenscompra where compra_id = ? ");
@@ -260,7 +262,26 @@ public class PersistenciaJDBC implements InterfacePersistencia{
 
     @Override
     public List<Jogador> getJogador() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Jogador> lista = null;
+        
+        // executar um select em tb_compra
+        PreparedStatement ps = this.con.prepareStatement("select c.nickname" + " from tb_jogador c " + " order by c.nickname asc ");        
+        ResultSet rs = ps.executeQuery();//executa a query
+        
+        lista = new ArrayList();
+        
+        while(rs.next()){
+
+            Jogador jg = new Jogador();//inicialização do objeto que será retornado.
+            jg.setNickname(rs.getString("nickname"));    
+
+            lista.add(jg);
+        }
+        
+        rs.close();
+        ps.close();//fecha o cursor
+        
+        return lista;
     }
     
     @Override
@@ -276,7 +297,7 @@ public class PersistenciaJDBC implements InterfacePersistencia{
         while(rs.next()){
 
             Compra compra = new Compra();//inicialização do objeto que será retornado.
-            compra.setId(rs.getInt("id")); 
+            compra.setId(rs.getInt("id"));
             compra.setData2(rs.getDate("data"));
             compra.setValorTotal(rs.getFloat("valortotal"));
             Jogador j = new Jogador();

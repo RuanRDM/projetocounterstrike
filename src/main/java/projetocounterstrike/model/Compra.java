@@ -99,5 +99,10 @@ public class Compra implements Serializable{
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
     }
+    
+    @Override
+    public String toString(){
+        return id.toString();
+    }
 
 }
