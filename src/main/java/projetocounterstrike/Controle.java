@@ -61,7 +61,7 @@ public class Controle {
                         JOptionPane.showMessageDialog(pnlAutenticacao, "Jogador "+u.getNickname()+" autenticado com sucesso!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
 
                         frame.setJMenuBar(menuBar);//adiciona o menu de barra no frame
-                        frame.showTela("tela_home");//muda a tela para o painel de boas vindas (home)
+                        frame.showTela("tela_home");//muda a tela para o painel inicial (home)
                     }else{
                         JOptionPane.showMessageDialog(pnlAutenticacao, "Dados inválidos!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
                     }

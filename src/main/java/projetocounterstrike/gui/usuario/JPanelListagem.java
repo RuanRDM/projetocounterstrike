@@ -38,11 +38,9 @@ public class JPanelListagem extends javax.swing.JPanel {
         try {
             List<Compra> listComp = controle.getConexaoJDBC().getCompras();
             for(Compra cp : listComp){
-                //System.out.println("cp.getItens() : "+ cp.getItens() );
-                // vai imprimir apenas o cpf do usuario em função do método toString da classe usuario 
                 SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 int quant=0;
-                if(cp.getItens()!= null){//como a cidade é opcional, testa antes recuperar a cidade do Usuario
+                if(cp.getItens()!= null){//como itens é opcional, testa antes recuperar a quantidade de itens da compra
                     Object[] obj = {cp, cp.getJogador(), df.format(cp.getData().getTime()), cp.getValorTotal(), ""};
                     for(ItensCompra ic : cp.getItens()){
                         quant=quant+ic.getQuantidade();

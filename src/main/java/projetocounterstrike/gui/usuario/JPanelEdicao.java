@@ -39,7 +39,8 @@ public class JPanelEdicao extends javax.swing.JPanel {
         String svalidadata = txfData.getText().trim();
         String[] arrayData = svalidadata.split("");
         String caracteres="0987654321.";
-        System.out.println("txfData.getText().trim().length(): "+txfData.getText().trim().length()+"\narrayData[2]: "+arrayData[2]+"\ncbxJogador.getSelectedIndex(): "+cbxJogador.getSelectedIndex()+"\ncbxJogador.getSelectedItem()"+cbxJogador.getSelectedItem());
+        //System.out.println("txfData.getText().trim().length(): "+txfData.getText().trim().length()+"\narrayData[2]: "+arrayData[2]+"\ncbxJogador.getSelectedIndex(): "+cbxJogador.getSelectedIndex()+"\ncbxJogador.getSelectedItem()"+cbxJogador.getSelectedItem());
+        //Testes condicionais para validar se a inserção ou update será valida.
         if(txfData.getText().trim().length()==10 && arrayData[2].equals("/") && arrayData[5].equals("/") && !caracteres.contains(txfValor.getText()+"") && cbxJogador.getSelectedItem().getClass() == Jogador.class){
             Compra c = new Compra();
             
